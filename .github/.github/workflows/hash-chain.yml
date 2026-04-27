@@ -1,0 +1,21 @@
+name: Hash Chain Verification
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  generate-hash:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compute hash and create artifact dcceda5a
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}
+        run: |
+          echo -n "${MY_SECRET}github-verified" | sha256sum | cut -c 1-10 > hash.txt
+          
+      - name: Upload artifact verify-hash-dcceda5a
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-hash-dcceda5a
+          path: hash.txt
